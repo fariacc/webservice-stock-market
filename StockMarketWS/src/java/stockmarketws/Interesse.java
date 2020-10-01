@@ -7,11 +7,11 @@ package stockmarketws;
 public class Interesse {
     String cliente;
     String codigo;
-    Long quantidadeDesejada;
+    Long quantidade;
     Long limiteGanho;
     Long limitePerda;
     
-    private Interesse(){
+    public Interesse(){
 
     }
     
