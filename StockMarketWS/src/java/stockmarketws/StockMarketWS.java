@@ -83,6 +83,41 @@ public class StockMarketWS {
         return "Ação removida com sucesso";
     }
     
+    @WebMethod(operationName = "venderAcao")
+    public String venderAcao(
+        @WebParam(name = "clienteArg") String clienteArg, 
+        @WebParam(name = "codigoArg") String codigoArg, 
+        @WebParam(name = "quantidadeArg") Long quantidadeArg, 
+        @WebParam(name = "precoArg") Long precoArg
+    ) {		
+        Acao acaoNaCarteira = acoes.stream()
+            .filter(acao -> acao.codigo.equals(codigoArg))
+            .filter(acao -> acao.cliente.equals(clienteArg))
+            .findFirst().orElse(null);
+
+        if (acaoNaCarteira == null) {
+            return "Você não possui essa ação na sua carteira";
+        }
+
+        if (!quantidadeSuficienteAcao(acaoNaCarteira, quantidadeArg)) {
+            return "Você não possui essa quantidade para vender";
+        }
+        
+        Acao _acaoVenda = new Acao();  
+        _acaoVenda.cliente = clienteArg;
+        _acaoVenda.codigo = codigoArg;
+        _acaoVenda.quantidade = quantidadeArg;
+        _acaoVenda.preco = precoArg;
+
+        ordensVenda.add(_acaoVenda);
+
+//        _acaoVenda.cliente.notificar("Sua ação foi colocada pra venda", _acaoVenda);
+
+//        alertarInteresses(_acaoVenda);
+
+        return quantidadeArg + " unidades da ação " + codigoArg + " foram colocadas a venda por R$" + precoArg + ",00 cada";
+    }
+    
     @WebMethod(operationName = "consultarInteresses")
     public String consultarInteresses(@WebParam(name = "clienteArg") String clienteArg) {
         String _interessesJSON = new Gson().toJson(
@@ -189,5 +224,9 @@ public class StockMarketWS {
         cotacoes.remove(_cotacaoRemover);
         
         return "Cotação removida com sucesso";
+    }
+    
+    private Boolean quantidadeSuficienteAcao(Acao acaoArg, Long quantidadeArg) {
+        return acaoArg.quantidade.compareTo(quantidadeArg) >= 0;
     }
 }
