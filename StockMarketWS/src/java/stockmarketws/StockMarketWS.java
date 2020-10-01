@@ -131,4 +131,63 @@ public class StockMarketWS {
         
         return "Interesse removido com sucesso";
     }
+    
+    @WebMethod(operationName = "obterCotacoes")
+    public String obterCotacoes(@WebParam(name = "clienteArg") String clienteArg) {
+        String _cotacoesJSON = new Gson().toJson(
+            cotacoes.stream().filter(cotacao -> cotacao.cliente.equals(clienteArg)).collect(Collectors.toList())
+        );
+        return _cotacoesJSON;
+    }
+    
+    @WebMethod(operationName = "obterCotacaoAcaoEspecifica")
+    public String obterCotacaoAcaoEspecifica(
+        @WebParam(name = "clienteArg") String clienteArg, 
+        @WebParam(name = "codigoArg") String codigoArg
+    ) {
+        String _cotacaoJSON = new Gson().toJson(cotacoes.stream()
+            .filter(cotacao -> cotacao.codigo.equals(codigoArg))
+            .filter(cotacao -> cotacao.cliente.equals(clienteArg))
+            .collect(Collectors.toList())
+        );
+        
+        return _cotacaoJSON;
+    }
+    
+    @WebMethod(operationName = "cadastrarAcaoCotacoes")
+    public String cadastrarAcaoCotacoes(
+        @WebParam(name = "clienteArg") String clienteArg, 
+        @WebParam(name = "codigoArg") String codigoArg
+    ) {
+        Acao cotacaoAtualizada = ordensVenda.stream()
+            .filter(ordem -> ordem.codigo.equals(codigoArg))
+            .findFirst().orElse(null);
+        
+        if (cotacaoAtualizada == null) {
+            return "Não é possivel fazer operações de cotações dessa ação pois ela não está disponível no mercado";
+        }
+        
+        cotacoes.add(cotacaoAtualizada);
+        
+        return "Cotação cadastrada com sucesso!";
+    }
+    
+    @WebMethod(operationName = "removerCotacaoAcaoEspecifica")
+    public String removerCotacaoAcaoEspecifica(
+        @WebParam(name = "clienteArg") String clienteArg, 
+        @WebParam(name = "codigoArg") String codigoArg
+    ) {
+        Acao _cotacaoRemover = cotacoes.stream()
+            .filter(cotacao -> cotacao.codigo.equals(codigoArg))
+            .filter(cotacao -> cotacao.cliente.equals(clienteArg))
+            .findFirst().orElse(null);
+        
+        if (_cotacaoRemover == null) {
+            return "Cotação não encontrada";
+        }
+              
+        cotacoes.remove(_cotacaoRemover);
+        
+        return "Cotação removida com sucesso";
+    }
 }

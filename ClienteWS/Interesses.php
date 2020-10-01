@@ -56,13 +56,13 @@
             <div class="menu-tabs col-md-10 mx-auto text-center box-shadow">  
                 <ul class="nav nav-tabs menu-superior">
                     <li class="nav-item">
-                        <a class="nav-link active" href="Carteira.php">Carteira</a>
+                        <a class="nav-link" href="Carteira.php">Carteira</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="CompraVenda.php">Compra e venda</a>
                     </li>   
                     <li class="nav-item">
-                        <a class="nav-link" href="Interesses.php">Interesses</a>
+                        <a class="nav-link active" href="Interesses.php">Interesses</a>
                     </li> 
                     <li class="nav-item">
                         <a class="nav-link" href="Cotacoes.php">Cotações</a>

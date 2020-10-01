@@ -196,7 +196,7 @@
                                         <input name="codigoArg" type="text" class="form-control" placeholder="Código da ação">
                                     </div>  
                                     <div class="form-group">                  
-                                        <input name="quantidadeArg" type="text" class="form-control" placeholder="Quantidade desejada">
+                                        <input name="quantidadeArg" type="text" class="form-control" placeholder="Quantidade">
                                     </div>  
                                     <div class="form-group">                  
                                         <input name="precoArg" type="text" class="form-control" placeholder="Preço unitário">
