@@ -17,17 +17,16 @@
         $resultVendaAcao = $SoapClient->venderAcao($params);
     }
     
-    else if (isset($_POST["cadastrarInteresse"])){    
-        unset($_POST["cadastrarInteresse"]);
+    else if (isset($_POST["comprarAcao"])){    
+        unset($_POST["comprarAcao"]);
         $params = array(
             'clienteArg'=>$_POST["clienteArg"],
             'codigoArg'=>$_POST["codigoArg"],
             'quantidadeArg'=>$_POST["quantidadeArg"],
-            'limitePerdaArg'=>$_POST["limitePerdaArg"],
-            'limiteGanhoArg'=>$_POST["limiteGanhoArg"]
+            'precoArg'=>$_POST["precoArg"]
 
         );
-        $resultCadastroInteresse = $SoapClient->cadastrarInteresse($params);
+        $resultCompraAcao = $SoapClient->comprarAcao($params);
     }
 ?>
 
@@ -38,7 +37,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">;
         <link rel="stylesheet" href="./css/main.css">
-        <title>Interesses | Stock Market Application</title>
+        <title>Compra e Venda | Stock Market Application</title>
     </head>
   <body>
       <div class="container">
@@ -96,24 +95,10 @@
                                 <div class="col-md-6">
                                     <div class="resultados">
                                         <?php
-                                            if (isset($resultComprarAcao)){
-                                                $jsonObj = json_decode($resultComprarAcao->return);
-                                                if (sizeof($jsonObj) != 0){
-                                                    echo "<p class='text-center texto-secundario'>";
-                                                    echo "Ação: ".$jsonObj->codigo;
-                                                    echo "</p>";
-                                                    echo "<p class='text-center texto-secundario'>";
-                                                    echo "Quantidade: ".$jsonObj->quantidade;
-                                                    echo "</p>";
-                                                    echo "<p class='text-center texto-secundario'>";
-                                                    echo "Preço unitário: R$ ".$jsonObj->preco.",00";
-                                                    echo "</p>";
-                                                }
-                                                else{
-                                                    echo "<p class='text-center texto-principal'>";
-                                                    echo "<span>Nenhuma ação encontrada</span>";
-                                                    echo "</p>";
-                                                }
+                                            if (isset($resultCompraAcao)){
+                                                echo "<p class='text-center texto-principal'>";
+                                                echo "<span>".$resultCompraAcao->return."</span>";
+                                                echo "</p>";
                                             }
                                             else {
                                                 echo "<p class='text-center texto-principal'>";

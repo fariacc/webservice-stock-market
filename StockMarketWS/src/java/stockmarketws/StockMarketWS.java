@@ -19,7 +19,6 @@ public class StockMarketWS {
     List<Acao> acoes = new ArrayList<>(); //lista de acoes que o cliente possui
     List<Interesse> interesses = new ArrayList<>(); //lista de acoes que o cliente deseja ser notificado quando atingirem limites de ganho/perda
     List<Acao> cotacoes = new ArrayList<>(); //lista de acoes que o cliente precisa/deseja monitorar (pode ou não ter essas acoes em carteira)
-    List<Acao> ordensCompra = new ArrayList<>();//lista de acoes que estao disponiveis para compra
     List<Acao> ordensVenda = new ArrayList<>();//lista de acoes que estao disponiveis para venda
     
     @WebMethod(operationName = "consultarCarteira")
@@ -81,6 +80,73 @@ public class StockMarketWS {
         acoes.remove(_acao);
         
         return "Ação removida com sucesso";
+    }
+    
+    @WebMethod(operationName = "comprarAcao")
+    public String comprarAcao(
+        @WebParam(name = "clienteArg") String clienteArg, 
+        @WebParam(name = "codigoArg") String codigoArg, 
+        @WebParam(name = "quantidadeArg") Long quantidadeArg, 
+        @WebParam(name = "precoArg") Long precoArg
+    ) {	
+        Acao acaoVendendo = ordensVenda.stream()
+            .filter(ordem -> ordem.codigo.equals(codigoArg))
+            .findFirst().orElse(null);
+
+        if (acaoVendendo == null) {
+            return "Ação não encontrada";
+        }
+
+        if (!quantidadeSuficienteAcao(acaoVendendo, quantidadeArg)) {
+            return "Quantidade da ação desejada não disponível";
+        }
+
+        if (precoArg < acaoVendendo.preco) {
+            return "O preco unitário é maior do que seu preço máximo a pagar";
+        }
+        
+        Acao _acaoComprada = new Acao();
+        _acaoComprada.cliente = clienteArg;
+        _acaoComprada.codigo = codigoArg;
+        _acaoComprada.quantidade = quantidadeArg;
+        _acaoComprada.preco = precoArg;
+        
+        acoes.add(_acaoComprada);
+
+        cotacoes.add(_acaoComprada);
+        
+        acaoVendendo.quantidade = (acaoVendendo.quantidade - quantidadeArg);
+
+        if (acaoVendendo.quantidade.equals(0L)) {
+            ordensVenda.remove(acaoVendendo);
+        }
+
+        acaoVendendo.preco = precoArg;
+
+//        acaoArg.cliente.notificar("A acao foi comprada com sucesso", acaoArg);
+
+//        acaoVendendo.cliente.notificar("Sua acao foi vendida com sucesso", acaoArg);
+
+        Acao acaoCarteiraAtualizada = acoes.stream()
+            .filter(acao -> acao.codigo.equals(acaoVendendo.codigo))
+            .filter(acao -> acao.cliente.equals(acaoVendendo.cliente))
+            .findFirst().orElse(null);
+
+        acaoCarteiraAtualizada.quantidade = (acaoCarteiraAtualizada.quantidade - acaoVendendo.quantidade) + (acaoVendendo.quantidade - quantidadeArg);
+
+        acaoCarteiraAtualizada.preco = acaoVendendo.preco;
+
+        Acao acaoCotacaoAtualizada = cotacoes.stream()
+            .filter(acao -> acao.codigo.equals(acaoVendendo.codigo))
+            .findFirst().orElse(null);
+
+        acaoCotacaoAtualizada.quantidade = acaoVendendo.quantidade;
+
+        acaoCotacaoAtualizada.preco = precoArg;
+
+//        alertarInteresses(acaoVendendo);
+
+        return "";
     }
     
     @WebMethod(operationName = "venderAcao")
