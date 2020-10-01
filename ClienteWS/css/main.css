@@ -1,0 +1,96 @@
+/* 
+    Author: fariacc
+*/
+
+body{
+    background-image: linear-gradient(#213345, #737373);
+    min-width: 100vw;
+    min-height: 100vh;
+}
+
+.btn{
+    background-color: #41698e;
+    padding: .25em .4em;
+    border-radius: 0!important;
+    color: #fff;
+    width: max-content;
+    margin-top: .5em;
+    margin-bottom: .5em;
+}
+
+.box-shadow{
+    box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
+}
+
+h2{
+    font-weight: lighter;
+}
+
+hr{
+    margin-bottom: 6vh;
+    border: 0;
+    border-top: 1px solid #fff;
+    width: 50%;
+}
+
+.menu-tabs{
+    background-color: #ececec;
+    min-height: 70vh;
+    padding-bottom: 2vh;
+}
+
+.menu-tabs .nav-tabs.menu-superior{
+    margin-bottom: 6vh;
+}
+
+.menu-tabs .nav-tabs.menu-superior .nav-item{
+    width: 25%;
+}
+
+.menu-tabs .nav-tabs.menu-superior .nav-item .nav-link{
+    height: 100%;
+    text-align: center;
+    padding-left: .1vw;
+    padding-right: .1vw;
+    color: #41698e;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.menu-tabs .nav-tabs.menu-superior .nav-item .nav-link.active, .menu-tabs nav-tabs.menu-superior .nav-item .nav-link:hover{
+    border: none;
+    border-bottom: 2px solid #213345;
+    background-color: transparent;
+}
+
+.resultados{
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.resultados p.texto-principal {
+    font-size: 1.2em;
+    padding-top: .5vh;
+    padding-bottom: 1vh;
+    color: #41698e;
+    margin-bottom: 0;
+}
+
+.resultados p.texto-secundario {
+    padding-top: .5vh;
+    padding-bottom: .5vh;
+    color: #41698e;
+    margin-bottom: 0;
+}
+
+.resultados hr{
+    border: 0;
+    border-top: 1px solid #737373;
+    width: 80%;
+    margin-bottom: 1rem;
+}
+
+
