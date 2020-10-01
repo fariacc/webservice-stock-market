@@ -14,6 +14,15 @@
         $resultConsultaCarteira = $SoapClient->consultarCarteira($params);
     }
     
+    else if (isset($_POST["consultarCarteiraAcaoEspecifica"])){    
+        unset($_POST["consultarCarteiraAcaoEspecifica"]);
+        $params = array(
+            'clienteArg'=>$_POST["clienteArg"],
+            'codigoArg'=>$_POST["codigoArg"]
+        );
+        $resultConsultaCarteiraAcaoEspecifica = $SoapClient->consultarCarteiraAcaoEspecifica($params);
+    }
+    
     else if (isset($_POST["cadastrarAcaoCarteira"])){    
         unset($_POST["cadastrarAcaoCarteira"]);
         $params = array(
@@ -23,6 +32,15 @@
             'precoArg'=>$_POST["precoArg"]
         );
         $resultCadastroAcaoCarteira = $SoapClient->cadastrarAcaoCarteira($params);
+    }
+    
+    else if (isset($_POST["removerAcaoCarteira"])){    
+        unset($_POST["removerAcaoCarteira"]);
+        $params = array(
+            'clienteArg'=>$_POST["clienteArg"],
+            'codigoArg'=>$_POST["codigoArg"]
+        );
+        $resultRemocaoAcaoCarteira = $SoapClient->removerAcaoCarteira($params);
     }
 ?>
 
@@ -59,10 +77,13 @@
                 </ul>
                 
                 <div class="row" id="aba-carteira">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <ul class="nav nav-tabs flex-column" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" id="consultar-carteira-tab" data-toggle="tab" href="#consultar-carteira" role="tab" aria-controls="consultar-carteira" aria-selected="true">Consultar carteira</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="consultar-carteira-acao-especifica-tab" data-toggle="tab" href="#consultar-carteira-acao-especifica" role="tab" aria-controls="consultar-carteira-acao-especifica" aria-selected="false">Consultar ação específica</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="cadastrar-acao-carteira-tab" data-toggle="tab" href="#cadastrar-acao-carteira" role="tab" aria-controls="cadastrar-acao-carteira" aria-selected="false">Cadastrar ação</a>
@@ -73,7 +94,7 @@
                         </ul>
                     </div>
                     
-                    <div class="col-md-9 tab-content">
+                    <div class="col-md-8 tab-content">
                         <div id="consultar-carteira" class="tab-pane fade show active" role="tabpanel" aria-labelledby="consultar-carteira">
                             <div class="row">   
                                 <form class="col-md-6" action="Carteira.php" method="post">
@@ -110,6 +131,53 @@
                                             else {
                                                 echo "<p class='text-center texto-principal'>";
                                                 echo "<span>Consulte a sua carteira</span>";
+                                                echo "</p>";
+                                            }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="consultar-carteira-acao-especifica" class="tab-pane fade" role="tabpanel" aria-labelledby="consultar-carteira-acao-especifica">
+                            <div class="row">   
+                                <form class="col-md-6" action="Carteira.php" method="post">
+                                    <div class="form-group">                  
+                                        <input name="clienteArg" type="text" class="form-control" placeholder="Seu nome">
+                                    </div>
+                                    <div class="form-group">                  
+                                        <input name="codigoArg" type="text" class="form-control" placeholder="Código da ação">
+                                    </div>
+                                    <button name="consultarCarteiraAcaoEspecifica" type="submit" class="btn btn-primary">Consultar ação específica</button>
+                                </form>
+                                <div class="col-md-6">
+                                    <div class="resultados">
+                                        <?php
+                                            if (isset($resultConsultaCarteiraAcaoEspecifica)){
+                                                $jsonObj = json_decode($resultConsultaCarteiraAcaoEspecifica->return);
+                                                if (sizeof($jsonObj) != 0){
+                                                    foreach ($jsonObj as $acao){
+                                                        echo "<p class='text-center texto-secundario'>";
+                                                        echo "Ação: ".$acao->codigo;
+                                                        echo "</p>";
+                                                        echo "<p class='text-center texto-secundario'>";
+                                                        echo "Quantidade: ".$acao->quantidade;
+                                                        echo "</p>";
+                                                        echo "<p class='text-center texto-secundario'>";
+                                                        echo "Preço unitário: R$ ".$acao->preco.",00";
+                                                        echo "</p>";
+                                                        echo "<hr>";
+                                                    }
+                                                }
+                                                else{
+                                                    echo "<p class='text-center texto-principal'>";
+                                                    echo "<span>Nenhuma ação encontrada</span>";
+                                                    echo "</p>";
+                                                }
+                                            }
+                                            else {
+                                                echo "<p class='text-center texto-principal'>";
+                                                echo "<span>Consulte uma ação específica na sua carteira</span>";
                                                 echo "</p>";
                                             }
                                         ?>
@@ -156,6 +224,36 @@
                                             else {
                                                 echo "<p class='text-center texto-principal'>";
                                                 echo "<span>Cadastre uma ação na carteira</span>";
+                                                echo "</p>";
+                                            }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="remover-acao" class="tab-pane fade" role="tabpanel" aria-labelledby="remover-acao">
+                            <div class="row">   
+                                <form class="col-md-6" action="Carteira.php" method="post">
+                                    <div class="form-group">                  
+                                        <input name="clienteArg" type="text" class="form-control" placeholder="Seu nome">
+                                    </div>
+                                    <div class="form-group">                  
+                                        <input name="codigoArg" type="text" class="form-control" placeholder="Código da ação">
+                                    </div>
+                                    <button name="removerAcaoCarteira" type="submit" class="btn btn-primary">Remover ação</button>
+                                </form>
+                                <div class="col-md-6">
+                                    <div class="resultados">
+                                        <?php
+                                            if (isset($resultRemocaoAcaoCarteira)){
+                                                echo "<p class='text-center texto-principal'>";
+                                                echo "<span>".$resultRemocaoAcaoCarteira->return."</span>";
+                                                echo "</p>";
+                                            }
+                                            else {
+                                                echo "<p class='text-center texto-principal'>";
+                                                echo "<span>Consulte uma ação específica na sua carteira</span>";
                                                 echo "</p>";
                                             }
                                         ?>

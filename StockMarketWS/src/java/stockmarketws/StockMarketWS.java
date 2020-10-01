@@ -30,6 +30,20 @@ public class StockMarketWS {
         return _acoesJSON;
     }
     
+    @WebMethod(operationName = "consultarCarteiraAcaoEspecifica")
+    public String consultarCarteiraAcaoEspecifica(
+        @WebParam(name = "clienteArg") String clienteArg, 
+        @WebParam(name = "codigoArg") String codigoArg
+    ) {
+        String _acaoJSON = new Gson().toJson(acoes.stream()
+            .filter(acao -> acao.codigo.equals(codigoArg))
+            .filter(acao -> acao.cliente.equals(clienteArg))
+            .collect(Collectors.toList())
+        );
+        
+        return _acaoJSON;
+    }
+    
     @WebMethod(operationName = "cadastrarAcaoCarteira")
     public String cadastrarAcaoCarteira(
         @WebParam(name = "clienteArg") String clienteArg, 
@@ -48,5 +62,24 @@ public class StockMarketWS {
         String _acaoJSON = new Gson().toJson(_acao);
         
         return _acaoJSON;
+    }
+    
+    @WebMethod(operationName = "removerAcaoCarteira")
+    public String removerAcaoCarteira(
+        @WebParam(name = "clienteArg") String clienteArg, 
+        @WebParam(name = "codigoArg") String codigoArg
+    ) {
+        Acao _acao = acoes.stream()
+            .filter(acao -> acao.codigo.equals(codigoArg))
+            .filter(acao -> acao.cliente.equals(clienteArg))
+            .findFirst().orElse(null);
+        
+        if (_acao == null) {
+            return "Ação não encontrada";
+        }
+              
+        acoes.remove(_acao);
+        
+        return "Ação removida com sucesso";
     }
 }
