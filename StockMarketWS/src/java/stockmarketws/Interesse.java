@@ -1,9 +1,9 @@
+/*
+ * @author fariacc
+*/
+
 package stockmarketws;
 
-/**
- *
- * @author CAROLINA
- */
 public class Interesse {
     String cliente;
     String codigo;

@@ -1,9 +1,9 @@
+/*
+ * @author fariacc
+*/
+
 package stockmarketws;
 
-/**
- *
- * @author fariacc
- */
 public class Acao {
     String cliente;
     String codigo;

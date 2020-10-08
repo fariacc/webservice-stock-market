@@ -17,6 +17,7 @@
     else if (isset($_POST["obterCotacaoAcaoEspecifica"])){    
         unset($_POST["obterCotacaoAcaoEspecifica"]);
         $params = array(
+//            'clienteArg'=>'http://localhost:'.$_SERVER['REMOTE_PORT'],
             'clienteArg'=>$_POST["clienteArg"],
             'codigoArg'=>$_POST["codigoArg"]
         );

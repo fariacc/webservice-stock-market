@@ -3,28 +3,35 @@
 -->
 
 <?php
+    //conexão com o endereço do WSDL que é o nosso Web Service
     $SoapClient = new SoapClient("http://localhost:8080/StockMarketWS/StockMarketWS?wsdl");
     
+    //caso seja um POST para vender uma ação
     if (isset($_POST["venderAcao"])){    
         unset($_POST["venderAcao"]);
 
+        //parametros que são passados para o método do Web Service
         $params = array(
             'clienteArg'=>$_POST["clienteArg"],
             'codigoArg'=>$_POST["codigoArg"],
             'quantidadeArg'=>$_POST["quantidadeArg"],
             'precoArg'=>$_POST["precoArg"]
         );
+        
+        //recebendo o resultado do método que está no Web Service
         $resultVendaAcao = $SoapClient->venderAcao($params);
     }
     
+    //caso seja um POST para comprar uma ação
     else if (isset($_POST["comprarAcao"])){    
         unset($_POST["comprarAcao"]);
+        
+        //parametros que são passados para o método do Web Service
         $params = array(
             'clienteArg'=>$_POST["clienteArg"],
             'codigoArg'=>$_POST["codigoArg"],
             'quantidadeArg'=>$_POST["quantidadeArg"],
             'precoArg'=>$_POST["precoArg"]
-
         );
         $resultCompraAcao = $SoapClient->comprarAcao($params);
     }
@@ -77,6 +84,7 @@
                     <div class="col-md-8 tab-content">
                         <div id="comprar-acao" class="tab-pane fade show active" role="tabpanel" aria-labelledby="comprar-acao">
                             <div class="row">   
+                                <!--formulário de compra de ação-->
                                 <form class="col-md-6" action="CompraVenda.php" method="post">
                                     <div class="form-group">                  
                                         <input name="clienteArg" type="text" class="form-control" placeholder="Seu nome">
@@ -95,8 +103,10 @@
                                 <div class="col-md-6">
                                     <div class="resultados">
                                         <?php
+                                            //checa se tem conteúdo na variável
                                             if (isset($resultCompraAcao)){
                                                 echo "<p class='text-center texto-principal'>";
+                                                //imprime na aplicação o retorno da variável
                                                 echo "<span>".$resultCompraAcao->return."</span>";
                                                 echo "</p>";
                                             }
@@ -113,6 +123,7 @@
                         
                         <div id="vender-acao" class="tab-pane fade" role="tabpanel" aria-labelledby="vender-acao">
                             <div class="row">   
+                                <!--formulário de colocar ação a venda-->
                                 <form class="col-md-6" action="CompraVenda.php" method="post">
                                     <div class="form-group">                  
                                         <input name="clienteArg" type="text" class="form-control" placeholder="Seu nome">
